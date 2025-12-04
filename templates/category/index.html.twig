@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Job Categories - JobEntry{% endblock %}
+
+{% block content %}
+        <!-- Page Header Start -->
+        <div class="container-xxl py-5 bg-primary page-header position-relative mb-5">
+            <div class="container text-center py-5">
+                <h1 class="display-4 text-white mb-3 animated slideInDown">Job Categories</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0 animated slideInDown">
+                        <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_home') }}">Home</a></li>
+                        <li class="breadcrumb-item text-white active">Categories</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- Page Header End -->
+
+        <!-- Category Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row g-4">
+                    {% for category in categories %}
+                    <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <a class="cat-item d-block bg-image h-100 rounded p-4" href="{{ path('app_categories_show', { id: category.id }) }}">
+                            <h6 class="mb-3">{{ category.name }}</h6>
+                            <small>{{ category.jobs|length }} Jobs Available</small>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- Category End -->
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Testimonials - JobEntry{% endblock %}
+
+{% block content %}
+        <!-- Page Header Start -->
+        <div class="container-xxl py-5 bg-primary page-header position-relative mb-5">
+            <div class="container text-center py-5">
+                <h1 class="display-4 text-white mb-3 animated slideInDown">Success Stories</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0 animated slideInDown">
+                        <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_home') }}">Home</a></li>
+                        <li class="breadcrumb-item text-white active">Testimonials</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- Page Header End -->
+
+        <!-- Testimonial Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <h1 class="mb-5">What Our Users Say</h1>
+                <div class="row g-4">
+                    <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="testimonial-item bg-light rounded p-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <img class="img-fluid bg-light rounded-circle p-2" src="{{ asset('img/testimonial-1.jpg') }}" style="width: 100px; height: 100px;">
+                                <div class="ps-3">
+                                    <h6>John Doe</h6>
+                                    <small>Software Developer</small>
+                                </div>
+                            </div>
+                            <p class="mb-0">JobEntry helped me find my dream job as a software developer. The platform is user-friendly and the job listings are comprehensive.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="testimonial-item bg-light rounded p-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <img class="img-fluid bg-light rounded-circle p-2" src="{{ asset('img/testimonial-2.jpg') }}" style="width: 100px; height: 100px;">
+                                <div class="ps-3">
+                                    <h6>Jane Smith</h6>
+                                    <small>Marketing Manager</small>
+                                </div>
+                            </div>
+                            <p class="mb-0">I landed a great marketing position through JobEntry. Their advanced filtering options made it easy to find the perfect role for my skills.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.5s">
+                        <div class="testimonial-item bg-light rounded p-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <img class="img-fluid bg-light rounded-circle p-2" src="{{ asset('img/testimonial-3.jpg') }}" style="width: 100px; height: 100px;">
+                                <div class="ps-3">
+                                    <h6>Mike Johnson</h6>
+                                    <small>Data Analyst</small>
+                                </div>
+                            </div>
+                            <p class="mb-0">Excellent platform! I found multiple job opportunities and successfully got hired. Highly recommend JobEntry to anyone looking for a job.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Testimonial End -->
+{% endblock %}

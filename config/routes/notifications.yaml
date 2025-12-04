@@ -1,0 +1,27 @@
+app_notifications:
+    path: /notifications
+    controller: App\Controller\NotificationController::index
+
+app_notifications_unread:
+    path: /notifications/unread
+    controller: App\Controller\NotificationController::unread
+
+app_notification_mark_read:
+    path: /notifications/{id}/mark-read
+    controller: App\Controller\NotificationController::markRead
+    methods: [POST]
+
+app_notification_delete:
+    path: /notifications/{id}/delete
+    controller: App\Controller\NotificationController::delete
+    methods: [POST]
+
+app_notifications_mark_all_read:
+    path: /notifications/mark-all-read
+    controller: App\Controller\NotificationController::markAllRead
+    methods: [POST]
+
+app_notifications_count_unread:
+    path: /notifications/count-unread
+    controller: App\Controller\NotificationController::countUnread
+    methods: [GET]

@@ -1,0 +1,83 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Edit Job - Admin{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Edit Job</h1>
+
+            {{ form_start(form, {'attr': {'class': 'mt-4'}}) }}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            {{ form_label(form.title) }}
+                            {{ form_widget(form.title) }}
+                            {{ form_errors(form.title) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            {{ form_label(form.company) }}
+                            {{ form_widget(form.company) }}
+                            {{ form_errors(form.company) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            {{ form_label(form.location) }}
+                            {{ form_widget(form.location) }}
+                            {{ form_errors(form.location) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            {{ form_label(form.salary) }}
+                            {{ form_widget(form.salary) }}
+                            {{ form_errors(form.salary) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            {{ form_label(form.jobType) }}
+                            {{ form_widget(form.jobType) }}
+                            {{ form_errors(form.jobType) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            {{ form_label(form.category) }}
+                            {{ form_widget(form.category) }}
+                            {{ form_errors(form.category) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.description) }}
+                    {{ form_widget(form.description) }}
+                    {{ form_errors(form.description) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.isActive) }}
+                    {{ form_widget(form.isActive) }}
+                    {{ form_errors(form.isActive) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_widget(form.save, {'attr': {'class': 'btn btn-warning'}}) }}
+                    <a href="{{ path('app_admin_jobs') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

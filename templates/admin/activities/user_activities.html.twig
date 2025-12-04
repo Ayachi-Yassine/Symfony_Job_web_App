@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User Activities - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <a href="{{ path('app_admin_activities') }}" class="btn btn-secondary mb-3">
+                <i class="fas fa-arrow-left"></i> Back to Activities
+            </a>
+            <h2>
+                <i class="fas fa-history"></i> Activities for {{ user.email }}
+            </h2>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Activity Timeline ({{ activities|length }} entries)</h5>
+            <a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class="btn btn-sm btn-light">
+                <i class="fas fa-user"></i> View User
+            </a>
+        </div>
+        <div class="card-body">
+            {% if activities|length > 0 %}
+                <div class="timeline-container">
+                    {% for activity in activities %}
+                        <div class="timeline-item mb-4 pb-4" style="border-left: 3px solid #007bff; padding-left: 20px;">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="mb-1">
+                                        <i class="fas fa-circle" style="color: #007bff; font-size: 8px;"></i>
+                                        <span class="badge bg-info">{{ activity.actionLabel }}</span>
+                                    </h6>
+                                    {% if activity.description %}
+                                        <p class="mb-2 text-muted">{{ activity.description }}</p>
+                                    {% endif %}
+                                    <small class="text-secondary">
+                                        <i class="fas fa-globe"></i> IP: {{ activity.ipAddress ?? 'N/A' }}
+                                        {% if activity.userAgent %}
+                                            <br>
+                                            <i class="fas fa-desktop"></i> {{ activity.userAgent|slice(0, 60) }}{% if activity.userAgent and activity.userAgent|length > 60 %}...{% endif %}
+                                        {% endif %}
+                                    </small>
+                                </div>
+                                <small class="text-muted whitespace-nowrap">
+                                    <i class="fas fa-clock"></i> {{ activity.createdAt|date('M d, Y H:i:s') }}
+                                </small>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    <i class="fas fa-info-circle"></i> No activities recorded for this user.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline-item:last-child {
+    border-left-color: transparent !important;
+    padding-bottom: 0 !important;
+}
+
+.timeline-item:hover {
+    background-color: #f8f9fa;
+    margin-left: -5px;
+    padding-left: 25px;
+    transition: all 0.3s ease;
+}
+</style>
+{% endblock %}

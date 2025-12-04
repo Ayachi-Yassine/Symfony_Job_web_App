@@ -1,0 +1,160 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Application Details - Job Portal{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <!-- Status Header -->
+            <div class="alert {% if application.isPending() %}alert-warning{% elseif application.isAccepted() %}alert-success{% elseif application.isRejected() %}alert-danger{% else %}alert-secondary{% endif %}" role="alert">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-1">
+                            Application {{ application.statusLabel }}
+                        </h4>
+                        <small>Applied on {{ application.appliedAt|date('F d, Y H:i') }}</small>
+                    </div>
+                    <div style="font-size: 40px;">
+                        {% if application.isPending() %}
+                            <i class="fas fa-hourglass-half"></i>
+                        {% elseif application.isAccepted() %}
+                            <i class="fas fa-check-circle"></i>
+                        {% elseif application.isRejected() %}
+                            <i class="fas fa-times-circle"></i>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Details -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-briefcase"></i> Job Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <h4>{{ application.job.title }}</h4>
+                    <p class="text-muted mb-3">{{ application.job.company }} - {{ application.job.location }}</p>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Job Type:</strong> {{ application.job.jobType }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Salary:</strong> {{ application.job.salary ?? 'Not specified' }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Category:</strong> {{ application.job.category.name }}
+                    </div>
+
+                    <div class="mb-0">
+                        <strong>Description:</strong>
+                        <p class="mt-2">{{ application.job.description }}</p>
+                    </div>
+
+                    <a href="{{ route_exists('app_jobs_show') ? path('app_jobs_show', {'id': application.job.id}) : '#' }}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-external-link-alt"></i> View Full Job Posting
+                    </a>
+                </div>
+            </div>
+
+            <!-- Application Details -->
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-file-alt"></i> Application Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Status:</strong><br>
+                        {% if application.isPending() %}
+                            <span class="badge bg-warning text-dark">Pending Review</span>
+                            <p class="text-muted mt-2 mb-0">Your application is being reviewed. You'll be notified once a decision has been made.</p>
+                        {% elseif application.isAccepted() %}
+                            <span class="badge bg-success">Accepted</span>
+                            <p class="text-success mt-2 mb-0">Congratulations! You've been selected for this position.</p>
+                        {% elseif application.isRejected() %}
+                            <span class="badge bg-danger">Rejected</span>
+                            <p class="text-muted mt-2 mb-0">Thank you for your interest. Please check other opportunities.</p>
+                        {% endif %}
+                    </div>
+
+                    <hr>
+
+                    <div class="mb-3">
+                        <strong>Timeline:</strong>
+                        <ul class="list-unstyled mt-2">
+                            <li><i class="fas fa-calendar"></i> Applied: {{ application.appliedAt|date('F d, Y H:i') }}</li>
+                            {% if application.reviewedAt %}
+                                <li><i class="fas fa-calendar"></i> Reviewed: {{ application.reviewedAt|date('F d, Y H:i') }}</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                    {% if application.applicationLetter %}
+                        <hr>
+                        <div class="mb-3">
+                            <strong>Your Cover Letter:</strong>
+                            <div class="mt-2 p-3 bg-light border rounded">
+                                {{ application.applicationLetter }}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if application.cvFileName %}
+                        <hr>
+                        <div class="mb-3">
+                            <strong>Your CV:</strong><br>
+                            <a href="{{ asset('uploads/applications/' ~ application.cvFileName) }}" class="btn btn-sm btn-outline-success" target="_blank">
+                                <i class="fas fa-download"></i> Download CV
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    {% if application.adminNotes and not application.isPending() %}
+                        <hr>
+                        <div class="alert alert-light border">
+                            <strong>Admin Notes:</strong>
+                            <p class="mt-2 mb-0">{{ application.adminNotes }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Actions -->
+            {% if application.isPending() %}
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-exclamation-circle"></i> Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-3">You can still withdraw this application if you change your mind.</p>
+                    <form method="POST" action="{{ path('app_application_withdraw', {'id': application.id}) }}" class="d-inline">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to withdraw this application?')">
+                            <i class="fas fa-times"></i> Withdraw Application
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Navigation -->
+            <div class="mt-4">
+                <a href="{{ path('app_user_applications') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Applications
+                </a>
+                <a href="{{ path('app_profile_view') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

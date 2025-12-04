@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Profile - Job Portal{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-edit"></i> Edit Profile
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Personal Information Form -->
+                    <h6 class="mb-3 text-primary">Personal Information</h6>
+                    <form method="POST" action="{{ path('app_profile_edit') }}" class="mb-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstName" name="firstName" value="{{ profile.firstName ?? '' }}" placeholder="Enter first name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" name="lastName" value="{{ profile.lastName ?? '' }}" placeholder="Enter last name">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" value="{{ profile.phone ?? '' }}" placeholder="Enter phone number">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" name="city" value="{{ profile.city ?? '' }}" placeholder="Enter city">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" name="address" value="{{ profile.address ?? '' }}" placeholder="Enter address">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="postalCode" class="form-label">Postal Code</label>
+                                <input type="text" class="form-control" id="postalCode" name="postalCode" value="{{ profile.postalCode ?? '' }}" placeholder="Enter postal code">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="bio" class="form-label">Bio/About Me</label>
+                            <textarea class="form-control" id="bio" name="bio" rows="4" placeholder="Tell us about yourself">{{ profile.bio ?? '' }}</textarea>
+                            <small class="form-text text-muted">Maximum 500 characters</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                        <a href="{{ path('app_profile_view') }}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </form>
+
+                    <hr>
+
+                    <!-- CV Upload Form -->
+                    <h6 class="mb-3 text-success">Upload CV/Resume</h6>
+                    <form method="POST" action="{{ path('app_profile_cv_upload') }}" enctype="multipart/form-data" class="mb-4">
+                        <div class="mb-3">
+                            <label for="cv" class="form-label">CV File (PDF only)</label>
+                            <input type="file" class="form-control" id="cv" name="cv" accept=".pdf" required>
+                            <small class="form-text text-muted">Upload a PDF file (max 5MB)</small>
+                        </div>
+                        {% if profile.cvFileName %}
+                            <div class="alert alert-info alert-sm mb-3">
+                                <i class="fas fa-info-circle"></i> Current CV: 
+                                <a href="{{ asset('uploads/cv/' ~ profile.cvFileName) }}" target="_blank">Download</a>
+                            </div>
+                        {% endif %}
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-upload"></i> Upload CV
+                        </button>
+                    </form>
+
+                    <hr>
+
+                    <!-- Change Password Form -->
+                    <h6 class="mb-3 text-info">Change Password</h6>
+                    <form method="POST" action="{{ path('app_profile_change_password') }}">
+                        <div class="mb-3">
+                            <label for="currentPassword" class="form-label">Current Password</label>
+                            <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="newPassword" class="form-label">New Password</label>
+                                <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                                <small class="form-text text-muted">Minimum 6 characters</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-info">
+                            <i class="fas fa-key"></i> Change Password
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

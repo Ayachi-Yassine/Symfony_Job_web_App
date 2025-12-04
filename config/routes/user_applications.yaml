@@ -1,0 +1,19 @@
+app_user_applications:
+    path: /jobs/applications
+    controller: App\Controller\JobApplicationController::myApplications
+    methods: [GET]
+
+app_job_apply:
+    path: /jobs/{id}/apply
+    controller: App\Controller\JobApplicationController::apply
+    methods: [POST]
+
+app_application_withdraw:
+    path: /jobs/application/{id}/withdraw
+    controller: App\Controller\JobApplicationController::withdrawApplication
+    methods: [POST]
+
+app_application_detail:
+    path: /jobs/application/{id}
+    controller: App\Controller\JobApplicationController::applicationDetail
+    methods: [GET]

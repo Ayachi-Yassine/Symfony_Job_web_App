@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Manage Applications - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>
+                <i class="fas fa-file-alt"></i> Job Applications Management
+            </h2>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        {% set pending = 0 %}
+        {% set accepted = 0 %}
+        {% set rejected = 0 %}
+        {% for app in applications %}
+            {% if app.isPending() %}
+                {% set pending = pending + 1 %}
+            {% elseif app.isAccepted() %}
+                {% set accepted = accepted + 1 %}
+            {% elseif app.isRejected() %}
+                {% set rejected = rejected + 1 %}
+            {% endif %}
+        {% endfor %}
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-hourglass-half"></i> Pending
+                    </h5>
+                    <h2>{{ pending }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-check-circle"></i> Accepted
+                    </h5>
+                    <h2>{{ accepted }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-times-circle"></i> Rejected
+                    </h5>
+                    <h2>{{ rejected }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-list"></i> Total
+                    </h5>
+                    <h2>{{ applications|length }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Applications Table -->
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">All Applications</h5>
+        </div>
+        <div class="card-body">
+            {% if applications|length > 0 %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Job Title</th>
+                                <th>Applicant Email</th>
+                                <th>Status</th>
+                                <th>Applied</th>
+                                <th>Reviewed</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for app in applications %}
+                                <tr>
+                                    <td>#{{ app.id }}</td>
+                                    <td>
+                                        <strong>{{ app.job.title }}</strong><br>
+                                        <small class="text-muted">{{ app.job.company }}</small>
+                                    </td>
+                                    <td>{{ app.user.email }}</td>
+                                    <td>
+                                        {% if app.isPending() %}
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        {% elseif app.isAccepted() %}
+                                            <span class="badge bg-success">Accepted</span>
+                                        {% elseif app.isRejected() %}
+                                            <span class="badge bg-danger">Rejected</span>
+                                        {% elseif app.isWithdrawn() %}
+                                            <span class="badge bg-secondary">Withdrawn</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ app.appliedAt|date('M d, Y') }}</td>
+                                    <td>{{ app.reviewedAt ? app.reviewedAt|date('M d, Y') : '-' }}</td>
+                                    <td>
+                                        <a href="{{ path('app_admin_application_detail', {'id': app.id}) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    <i class="fas fa-info-circle"></i> No applications found.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

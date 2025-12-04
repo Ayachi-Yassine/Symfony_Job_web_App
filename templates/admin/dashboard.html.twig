@@ -1,0 +1,220 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Admin Dashboard - Job Portal{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1>Admin Dashboard</h1>
+            <p class="text-muted">Welcome back! Here's your job portal overview.</p>
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row mb-4">
+        <div class="col-md-2">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Jobs</h5>
+                    <h2>{{ stats.total_jobs }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Active Jobs</h5>
+                    <h2>{{ stats.active_jobs }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Categories</h5>
+                    <h2>{{ stats.total_categories }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <h2>{{ stats.total_users }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Pending Apps</h5>
+                    <h2>{{ stats.pending_applications }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-secondary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Active Users</h5>
+                    <h2>{{ stats.active_users }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-secondary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Active Users</h5>
+                    <h2>{{ stats.active_users }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Admins</h5>
+                    <h2>{{ stats.admins }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h3>Quick Actions</h3>
+            <a href="{{ path('app_admin_job_create') }}" class="btn btn-primary me-2">+ New Job</a>
+            <a href="{{ path('app_admin_category_create') }}" class="btn btn-success me-2">+ New Category</a>
+            <a href="{{ path('app_admin_jobs') }}" class="btn btn-info me-2">Manage Jobs</a>
+            <a href="{{ path('app_admin_categories') }}" class="btn btn-info me-2">Manage Categories</a>
+            <a href="{{ path('app_admin_users') }}" class="btn btn-warning">Manage Users</a>
+        </div>
+    </div>
+
+    <!-- Recent Jobs -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Jobs</h5>
+                </div>
+                <div class="card-body">
+                    {% if recentJobs %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Company</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for job in recentJobs %}
+                                        <tr>
+                                            <td>{{ job.title }}</td>
+                                            <td>{{ job.company }}</td>
+                                            <td>
+                                                {% if job.isActive %}
+                                                    <span class="badge bg-success">Active</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">Inactive</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No jobs yet</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Applications -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Recent Applications</h5>
+                    <a href="{{ path('app_admin_applications') }}" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    {% if recentApplications %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Job</th>
+                                        <th>Applicant</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for app in recentApplications|slice(0, 5) %}
+                                        <tr>
+                                            <td><small>{{ app.job.title|slice(0, 15) }}{% if app.job.title|length > 15 %}...{% endif %}</small></td>
+                                            <td><small>{{ app.user.email|slice(0, 20) }}{% if app.user.email|length > 20 %}...{% endif %}</small></td>
+                                            <td>
+                                                {% if app.isPending() %}
+                                                    <span class="badge bg-warning text-dark">Pending</span>
+                                                {% elseif app.isAccepted() %}
+                                                    <span class="badge bg-success">Accepted</span>
+                                                {% elseif app.isRejected() %}
+                                                    <span class="badge bg-danger">Rejected</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{{ path('app_admin_application_detail', {'id': app.id}) }}" class="btn btn-xs btn-outline-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No applications yet</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Quick Links -->
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Management Links</h5>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group" role="group">
+                        <a href="{{ path('app_admin_jobs') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-briefcase"></i> Manage Jobs
+                        </a>
+                        <a href="{{ path('app_admin_categories') }}" class="btn btn-outline-info">
+                            <i class="fas fa-list"></i> Manage Categories
+                        </a>
+                        <a href="{{ path('app_admin_users') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-users"></i> Manage Users
+                        </a>
+                        <a href="{{ path('app_admin_applications') }}" class="btn btn-outline-danger">
+                            <i class="fas fa-file-alt"></i> Review Applications
+                        </a>
+                        <a href="{{ path('app_admin_activities') }}" class="btn btn-outline-warning">
+                            <i class="fas fa-history"></i> View Activities
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

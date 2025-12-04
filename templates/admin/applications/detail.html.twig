@@ -1,0 +1,211 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Application Details - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <a href="{{ path('app_admin_applications') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+    </div>
+
+    <!-- Status Alert -->
+    <div class="alert {% if application.isPending() %}alert-warning{% elseif application.isAccepted() %}alert-success{% elseif application.isRejected() %}alert-danger{% else %}alert-secondary{% endif %} alert-lg" role="alert">
+        <h4>Application {{ application.statusLabel }}</h4>
+        <p class="mb-0">Applied: {{ application.appliedAt|date('F d, Y H:i') }}</p>
+    </div>
+
+    <div class="row">
+        <!-- Left Column -->
+        <div class="col-lg-7">
+            <!-- Job Information -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-briefcase"></i> Job Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <h4>{{ application.job.title }}</h4>
+                    <p class="mb-3">{{ application.job.company }} | {{ application.job.location }}</p>
+
+                    <div class="mb-3">
+                        <strong>Job Type:</strong> {{ application.job.jobType }}<br>
+                        <strong>Salary:</strong> {{ application.job.salary ?? 'N/A' }}<br>
+                        <strong>Category:</strong> {{ application.job.category.name }}
+                    </div>
+
+                    <div>
+                        <strong>Description:</strong>
+                        <p class="mt-2">{{ application.job.description }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applicant Information -->
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user"></i> Applicant Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2">
+                        <strong>Email:</strong> {{ application.user.email }}
+                    </p>
+                    <p class="mb-2">
+                        <strong>Status:</strong>
+                        {% if application.user.isIsActive() %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-danger">Inactive</span>
+                        {% endif %}
+                    </p>
+
+                    {% if application.user.profile %}
+                        <hr>
+                        <p class="mb-2">
+                            <strong>Name:</strong> {{ application.user.profile.fullName ?? 'Not provided' }}
+                        </p>
+                        <p class="mb-2">
+                            <strong>Phone:</strong> {{ application.user.profile.phone ?? 'Not provided' }}
+                        </p>
+                        <p class="mb-2">
+                            <strong>Location:</strong> {{ application.user.profile.city ?? 'Not provided' }}
+                        </p>
+                        {% if application.user.profile.bio %}
+                            <p class="mb-0">
+                                <strong>Bio:</strong> {{ application.user.profile.bio }}
+                            </p>
+                        {% endif %}
+                    {% endif %}
+
+                    <hr>
+                    <a href="{{ path('app_admin_user_activities', {'id': application.user.id}) }}" class="btn btn-sm btn-outline-info">
+                        <i class="fas fa-history"></i> View Activities
+                    </a>
+                </div>
+            </div>
+
+            <!-- Application Content -->
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-file-alt"></i> Application Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if application.applicationLetter %}
+                        <h6 class="mb-3">Cover Letter:</h6>
+                        <div class="p-3 bg-light border rounded mb-3">
+                            {{ application.applicationLetter }}
+                        </div>
+                    {% endif %}
+
+                    {% if application.cvFileName %}
+                        <h6 class="mb-2">CV/Resume:</h6>
+                        <a href="{{ asset('uploads/applications/' ~ application.cvFileName) }}" class="btn btn-sm btn-outline-success" target="_blank">
+                            <i class="fas fa-download"></i> Download CV
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-lg-5">
+            <!-- Review Section -->
+            {% if application.isPending() %}
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tasks"></i> Review Application
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ path('app_admin_application_review', {'id': application.id}) }}">
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Decision:</label>
+                            <div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" id="accept" value="accepted" required>
+                                    <label class="form-check-label text-success" for="accept">
+                                        <i class="fas fa-check-circle"></i> Accept
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" id="reject" value="rejected" required>
+                                    <label class="form-check-label text-danger" for="reject">
+                                        <i class="fas fa-times-circle"></i> Reject
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Admin Notes:</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="4" placeholder="Add notes about this decision..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-save"></i> Submit Review
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Review History -->
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history"></i> Review History
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item mb-3">
+                            <h6 class="mb-1">
+                                <i class="fas fa-file-upload" style="color: #007bff;"></i> Application Submitted
+                            </h6>
+                            <small class="text-muted">{{ application.appliedAt|date('F d, Y H:i') }}</small>
+                        </div>
+
+                        {% if not application.isPending() %}
+                            <div class="timeline-item mb-3">
+                                <h6 class="mb-1">
+                                    {% if application.isAccepted() %}
+                                        <i class="fas fa-check-circle" style="color: #28a745;"></i> Accepted
+                                    {% elseif application.isRejected() %}
+                                        <i class="fas fa-times-circle" style="color: #dc3545;"></i> Rejected
+                                    {% endif %}
+                                </h6>
+                                <small class="text-muted">{{ application.reviewedAt|date('F d, Y H:i') }}</small>
+                                {% if application.adminNotes %}
+                                    <p class="mt-2 mb-0 small">
+                                        <strong>Notes:</strong> {{ application.adminNotes }}
+                                    </p>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning alert-sm mb-0">
+                                Awaiting review...
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline-item {
+    border-left: 3px solid #007bff;
+    padding-left: 15px;
+}
+</style>
+{% endblock %}

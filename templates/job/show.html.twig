@@ -1,0 +1,131 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ job.title }} - JobEntry{% endblock %}
+
+{% block content %}
+        <!-- Page Header Start -->
+        <div class="container-xxl py-5 bg-primary page-header position-relative mb-5">
+            <div class="container text-center py-5">
+                <h1 class="display-4 text-white mb-3 animated slideInDown">{{ job.title }}</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0 animated slideInDown">
+                        <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_home') }}">Home</a></li>
+                        <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_jobs_index') }}">Jobs</a></li>
+                        <li class="breadcrumb-item text-white active">{{ job.title }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- Page Header End -->
+
+        <!-- Job Details Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row g-5">
+                    <div class="col-lg-8 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="mb-5">
+                            <h4 class="mb-3">{{ job.title }}</h4>
+                            <div class="row g-3 mb-4">
+                                <div class="col-sm-6">
+                                    <p><i class="fa fa-briefcase text-primary me-2"></i><strong>Job Type:</strong> {{ job.jobType }}</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p><i class="fa fa-map-marker-alt text-primary me-2"></i><strong>Location:</strong> {{ job.location }}</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p><i class="fa fa-building text-primary me-2"></i><strong>Company:</strong> {{ job.company }}</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p><i class="fa fa-dollar-sign text-primary me-2"></i><strong>Salary:</strong> {% if job.salary %}${{ job.salary }}{% else %}Negotiable{% endif %}</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p><i class="fa fa-folder text-primary me-2"></i><strong>Category:</strong> <a href="{{ path('app_categories_show', { id: job.category.id }) }}">{{ job.category.name }}</a></p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p><i class="fa fa-calendar text-primary me-2"></i><strong>Posted:</strong> {{ job.createdAt|date('M d, Y') }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-5">
+                            <h4 class="mb-3">Job Description</h4>
+                            <div class="bg-light p-4 rounded">
+                                {{ job.description|nl2br }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-5">
+                            <div class="col-12">
+                                <a href="{{ path('app_home') }}" class="btn btn-secondary me-2">Back to Home</a>
+                                <a href="{{ path('app_jobs_index') }}" class="btn btn-secondary">Back to Jobs</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="bg-light p-4 rounded mb-4 sticky-top" style="top: 60px;">
+                            <h4 class="mb-4">Quick Apply</h4>
+                            {% if app.user %}
+                                <form method="POST" action="{{ path('app_job_apply', { id: job.id }) }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('apply_job' ~ job.id) }}">
+                                    <button type="submit" class="btn btn-primary w-100">Apply Now</button>
+                                </form>
+                            {% else %}
+                                <a href="{{ path('app_login') }}" class="btn btn-primary w-100">Login to Apply</a>
+                            {% endif %}
+                        </div>
+
+                        <div class="bg-light p-4 rounded">
+                            <h4 class="mb-4">Company Information</h4>
+                            <p class="mb-3">
+                                <strong>Company:</strong><br>
+                                {{ job.company }}
+                            </p>
+                            <p class="mb-3">
+                                <strong>Location:</strong><br>
+                                {{ job.location }}
+                            </p>
+                            <p class="mb-0">
+                                <strong>Posted On:</strong><br>
+                                {{ job.createdAt|date('F d, Y') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Job Details End -->
+
+        <!-- Other Jobs Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <h1 class="mb-5">More Jobs in {{ job.category.name }}</h1>
+                <div class="row g-4">
+                    {% for relatedJob in job.category.jobs|slice(0, 3) %}
+                        {% if relatedJob.id != job.id %}
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="job-item p-4 mb-4">
+                                <div class="row g-4">
+                                    <div class="col-sm-12">
+                                        <div class="text-start">
+                                            <h5 class="mb-3">
+                                                <a href="{{ path('app_jobs_show', { id: relatedJob.id }) }}" class="text-decoration-none">{{ relatedJob.title }}</a>
+                                            </h5>
+                                            <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{ relatedJob.location }}</span>
+                                            <span class="text-truncate"><i class="far fa-clock text-primary me-2"></i>{{ relatedJob.jobType }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 d-flex justify-content-between align-items-end">
+                                        <small class="text-success">{{ relatedJob.company }}</small>
+                                        <a href="{{ path('app_jobs_show', { id: relatedJob.id }) }}" class="btn btn-primary btn-sm">View</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- Other Jobs End -->
+{% endblock %}

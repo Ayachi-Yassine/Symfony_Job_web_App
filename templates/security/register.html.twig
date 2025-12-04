@@ -1,0 +1,40 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Register - Job Portal{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">Create Account</h3>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+                        <div class="mb-3">
+                            {{ form_label(form.email, 'Email Address') }}
+                            {{ form_widget(form.email) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.password, 'Password') }}
+                            {{ form_widget(form.password) }}
+                            {{ form_errors(form.password) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_widget(form.register, {'attr': {'class': 'btn btn-success w-100'}}) }}
+                        </div>
+                    {{ form_end(form) }}
+
+                    <div class="mt-3 text-center">
+                        <p>Already have an account? <a href="{{ path('app_login') }}">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

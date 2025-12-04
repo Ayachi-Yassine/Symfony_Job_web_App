@@ -1,0 +1,221 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Profile - Job Portal{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-3">
+            <!-- Profile Sidebar -->
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-user-circle" style="font-size: 60px; color: #007bff;"></i>
+                    </div>
+                    <h5 class="card-title">{{ app.user.email }}</h5>
+                    <p class="text-muted">
+                        {% if profile.fullName %}
+                            {{ profile.fullName }}
+                        {% else %}
+                            <em>No name added</em>
+                        {% endif %}
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a href="{{ path('app_profile_edit') }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </a>
+                        <a href="{{ path('app_profile_activity') }}" class="btn btn-info btn-sm">
+                            <i class="fas fa-history"></i> Activity
+                        </a>
+                        <a href="{{ path('app_user_applications') }}" class="btn btn-success btn-sm">
+                            <i class="fas fa-file-alt"></i> Applications
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h6 class="card-title mb-3">Quick Stats</h6>
+                    <div class="mb-3">
+                        <small class="text-muted">Total Applications</small>
+                        <p class="h6 mb-0">{{ applications|length }}</p>
+                    </div>
+                    <hr>
+                    {% set pending = 0 %}
+                    {% set accepted = 0 %}
+                    {% set rejected = 0 %}
+                    {% for app in applications %}
+                        {% if app.isPending() %}
+                            {% set pending = pending + 1 %}
+                        {% elseif app.isAccepted() %}
+                            {% set accepted = accepted + 1 %}
+                        {% elseif app.isRejected() %}
+                            {% set rejected = rejected + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    <small class="text-muted">Pending</small>
+                    <p class="h6 mb-2 text-warning">{{ pending }}</p>
+                    <small class="text-muted">Accepted</small>
+                    <p class="h6 mb-2 text-success">{{ accepted }}</p>
+                    <small class="text-muted">Rejected</small>
+                    <p class="h6 mb-0 text-danger">{{ rejected }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <!-- Profile Information -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user"></i> Personal Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>First Name:</strong><br>
+                            {{ profile.firstName ?? 'Not provided' }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Last Name:</strong><br>
+                            {{ profile.lastName ?? 'Not provided' }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Email:</strong><br>
+                            {{ app.user.email }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Phone:</strong><br>
+                            {{ profile.phone ?? 'Not provided' }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>City:</strong><br>
+                            {{ profile.city ?? 'Not provided' }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Postal Code:</strong><br>
+                            {{ profile.postalCode ?? 'Not provided' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address -->
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-map-marker-alt"></i> Address
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>{{ profile.address ?? 'Not provided' }}</p>
+                </div>
+            </div>
+
+            <!-- Bio -->
+            {% if profile.bio %}
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle"></i> Bio
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>{{ profile.bio }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- CV Section -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-file-pdf"></i> CV/Resume
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if profile.cvFileName %}
+                        <div class="alert alert-success" role="alert">
+                            <i class="fas fa-check-circle"></i> CV uploaded
+                        </div>
+                        <a href="{{ asset('uploads/cv/' ~ profile.cvFileName) }}" class="btn btn-sm btn-outline-success" target="_blank">
+                            <i class="fas fa-download"></i> Download CV
+                        </a>
+                        <a href="{{ path('app_profile_edit') }}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-upload"></i> Upload New CV
+                        </a>
+                    {% else %}
+                        <div class="alert alert-warning" role="alert">
+                            <i class="fas fa-exclamation-triangle"></i> No CV uploaded yet
+                        </div>
+                        <a href="{{ path('app_profile_edit') }}" class="btn btn-primary">
+                            <i class="fas fa-upload"></i> Upload CV
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Recent Applications -->
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-file-alt"></i> Recent Applications
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if applications|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Job Title</th>
+                                        <th>Company</th>
+                                        <th>Status</th>
+                                        <th>Applied</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for app in applications|slice(0, 5) %}
+                                        <tr>
+                                            <td><strong>{{ app.job.title }}</strong></td>
+                                            <td>{{ app.job.company }}</td>
+                                            <td>
+                                                {% if app.isPending() %}
+                                                    <span class="badge bg-warning text-dark">Pending</span>
+                                                {% elseif app.isAccepted() %}
+                                                    <span class="badge bg-success">Accepted</span>
+                                                {% elseif app.isRejected() %}
+                                                    <span class="badge bg-danger">Rejected</span>
+                                                {% elseif app.isWithdrawn() %}
+                                                    <span class="badge bg-secondary">Withdrawn</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ app.appliedAt|date('M d, Y') }}</td>
+                                            <td>
+                                                <a href="{{ path('app_application_detail', {'id': app.id}) }}" class="btn btn-xs btn-outline-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% if applications|length > 5 %}
+                            <a href="{{ path('app_user_applications') }}" class="btn btn-sm btn-outline-secondary">
+                                View All Applications ({{ applications|length }})
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <p class="text-muted mb-0">No applications yet. <a href="{{ path('app_jobs_index') }}">Browse jobs</a></p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

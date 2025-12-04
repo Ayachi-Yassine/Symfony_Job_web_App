@@ -1,0 +1,23 @@
+app_profile_view:
+    path: /profile
+    controller: App\Controller\ProfileController::view
+
+app_profile_edit:
+    path: /profile/edit
+    controller: App\Controller\ProfileController::edit
+    methods: [GET, POST]
+
+app_profile_cv_upload:
+    path: /profile/cv-upload
+    controller: App\Controller\ProfileController::uploadCV
+    methods: [POST]
+
+app_profile_change_password:
+    path: /profile/change-password
+    controller: App\Controller\ProfileController::changePassword
+    methods: [POST]
+
+app_profile_activity:
+    path: /profile/activity
+    controller: App\Controller\ProfileController::viewActivity
+    methods: [GET]

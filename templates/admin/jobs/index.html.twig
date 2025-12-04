@@ -1,0 +1,65 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Manage Jobs - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>Manage Jobs</h1>
+                <a href="{{ path('app_admin_job_create') }}" class="btn btn-primary">+ Add New Job</a>
+            </div>
+        </div>
+    </div>
+
+    {% if jobs %}
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Company</th>
+                            <th>Location</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in jobs %}
+                            <tr>
+                                <td>{{ job.id }}</td>
+                                <td><strong>{{ job.title }}</strong></td>
+                                <td>{{ job.company }}</td>
+                                <td>{{ job.location }}</td>
+                                <td>{{ job.category.name }}</td>
+                                <td>
+                                    {% if job.isActive %}
+                                        <span class="badge bg-success">Active</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Inactive</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ job.createdAt|date('Y-m-d') }}</td>
+                                <td>
+                                    <a href="{{ path('app_admin_job_edit', {id: job.id}) }}" class="btn btn-sm btn-warning">Edit</a>
+                                    <form method="POST" action="{{ path('app_admin_job_delete', {id: job.id}) }}" style="display:inline;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ job.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">No jobs found. <a href="{{ path('app_admin_job_create') }}">Create one</a></div>
+    {% endif %}
+</div>
+{% endblock %}

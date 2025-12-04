@@ -1,0 +1,86 @@
+{% extends "base.html.twig" %}
+
+{% block title %}About Us - JobEntry{% endblock %}
+
+{% block content %}
+        <!-- Page Header Start -->
+        <div class="container-xxl py-5 bg-primary page-header position-relative mb-5">
+            <div class="container text-center py-5">
+                <h1 class="display-4 text-white mb-3 animated slideInDown">About Us</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0 animated slideInDown">
+                        <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_home') }}">Home</a></li>
+                        <li class="breadcrumb-item text-white active">About</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- Page Header End -->
+
+        <!-- About Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row g-5 align-items-center">
+                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <img class="img-fluid" src="{{ asset('img/about.jpg') }}" alt="">
+                    </div>
+                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                        <h1 class="mb-4">Welcome to JobEntry</h1>
+                        <p class="mb-4">JobEntry is a leading job portal connecting employers with talented professionals. We provide a comprehensive platform for job seekers to find their ideal positions and for employers to discover exceptional talent.</p>
+                        <p class="mb-4">Our mission is to simplify the recruitment process and help individuals achieve their career goals while assisting companies in building their dream teams.</p>
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="border-start border-5 border-primary ps-4">
+                                <h6>Since 2020</h6>
+                                <p>Connecting talent with opportunity</p>
+                            </div>
+                        </div>
+                        <a class="btn btn-primary py-3 px-5" href="{{ path('app_jobs_index') }}">Explore Jobs<i class="fa fa-arrow-right ms-3"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- About End -->
+
+        <!-- Why Us Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <h1 class="mb-5 wow fadeInUp" data-wow-delay="0.1s">Why Choose JobEntry?</h1>
+                <div class="row g-4">
+                    <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0 btn-square bg-primary rounded-circle" style="width: 64px; height: 64px;">
+                                <i class="fa fa-globe fa-2x text-white"></i>
+                            </div>
+                            <div class="ps-4">
+                                <h6>Global Opportunities</h6>
+                                <p>Access job listings from companies around the world</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0 btn-square bg-primary rounded-circle" style="width: 64px; height: 64px;">
+                                <i class="fa fa-filter fa-2x text-white"></i>
+                            </div>
+                            <div class="ps-4">
+                                <h6>Advanced Filtering</h6>
+                                <p>Find jobs that match your skills and preferences</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.5s">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0 btn-square bg-primary rounded-circle" style="width: 64px; height: 64px;">
+                                <i class="fa fa-bell fa-2x text-white"></i>
+                            </div>
+                            <div class="ps-4">
+                                <h6>Job Alerts</h6>
+                                <p>Get notified about new jobs matching your profile</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Why Us End -->
+{% endblock %}

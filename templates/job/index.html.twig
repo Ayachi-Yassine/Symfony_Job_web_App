@@ -1,0 +1,89 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Jobs - JobEntry{% endblock %}
+
+{% block content %}
+        <!-- Page Header Start -->
+        <div class="container-xxl py-5 bg-primary page-header position-relative mb-5">
+            <div class="container text-center py-5">
+                <h1 class="display-4 text-white mb-3 animated slideInDown">Job Listings</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0 animated slideInDown">
+                        <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_home') }}">Home</a></li>
+                        <li class="breadcrumb-item text-white active">Job List</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- Page Header End -->
+
+        <!-- Search Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <h1 class="mb-5">Search Jobs</h1>
+                <form method="GET" class="mb-5">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <input type="text" name="search" class="form-control" placeholder="Search by job title or company" value="{{ searchTerm }}">
+                        </div>
+                        <div class="col-md-4">
+                            <select name="category" class="form-select">
+                                <option value="">All Categories</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}" {% if selectedCategory == category.id %}selected{% endif %}>{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Search End -->
+
+        <!-- Jobs Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row g-4">
+                    {% if jobs %}
+                        {% for job in jobs %}
+                        <div class="col-lg-12 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="job-item p-4 mb-4">
+                                <div class="row g-4">
+                                    <div class="col-sm-12 col-md-8 d-flex align-items-center">
+                                        <div class="text-start ps-4">
+                                            <h5 class="mb-3">
+                                                <a href="{{ path('app_jobs_show', { id: job.id }) }}" class="text-decoration-none">{{ job.title }}</a>
+                                            </h5>
+                                            <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{ job.location }}</span>
+                                            <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{ job.jobType }}</span>
+                                            <span class="text-truncate"><i class="fa fa-building text-primary me-2"></i>{{ job.company }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
+                                        <div class="d-flex mb-3">
+                                            <a class="btn btn-light btn-square me-3" href="{{ path('app_jobs_show', { id: job.id }) }}"><i class="far fa-heart text-primary"></i></a>
+                                            <a class="btn btn-primary" href="{{ path('app_jobs_show', { id: job.id }) }}">View Details</a>
+                                        </div>
+                                        {% if job.salary %}
+                                            <small class="text-success">Salary: ${{ job.salary }}</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                No jobs found. Please try a different search.
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- Jobs End -->
+{% endblock %}

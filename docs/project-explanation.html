@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Job Portal — Project Explanation</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.6; padding: 20px; max-width: 900px; margin: auto; }
+    h1,h2,h3 { color: #2c3e50 }
+    pre { background:#f6f8fa;padding:10px;border-left:4px solid #ddd;overflow:auto }
+    code { background:#f6f8fa;padding:2px 4px;border-radius:4px }
+    a { color:#1a73e8 }
+  </style>
+</head>
+<body>
+<article>
+<h1>Job Portal Symfony Project — Beginner's Guide</h1>
+<p>This HTML copy mirrors <code>docs/project-explanation.md</code>. Open the markdown in an editor for easier reading/editing.</p>
+
+<h2>1. Project Overview</h2>
+<p>Purpose: a small job portal where companies post jobs and users can apply. It includes authentication, user profiles (with CV upload), job listings, single-click applications, notifications, and an admin panel to manage users, jobs and applications.</p>
+<p>Stack: PHP 8.2, Symfony 7.x, Doctrine ORM, Twig templates, Bootstrap front-end, MySQL (or other Doctrine-supported DB).</p>
+
+<h2>2. High-level Architecture</h2>
+<p>HTTP requests → Symfony Router → Controller → Services / Repositories → Entities (Doctrine) → Templates (Twig) → Response. Security: Symfony Security system with roles. File uploads: CVs stored under <code>public/uploads/</code>. Routes: explicit YAML for some controllers.</p>
+
+<h2>3. Project Structure (important files and folders)</h2>
+<ul>
+<li><code>public/</code> — web root</li>
+<li><code>src/Controller/</code> — controllers (AdminController, ProfileController, JobApplicationController, NotificationController)</li>
+<li><code>src/Entity/</code> — Doctrine entities (User, UserProfile, Job, JobApplication, Notification, UserActivity)</li>
+<li><code>templates/</code> — Twig templates (job/show, admin/users/edit, base)</li>
+<li><code>config/routes/</code> — YAML routes</li>
+<li><code>src/Twig/RouteExistsExtension.php</code> — Twig helper for route checks</li>
+</ul>
+
+<h2>4. Key Entities and Relationships</h2>
+<p>Summary of entities: User, UserProfile, Job, JobApplication, Notification, UserActivity. See the markdown file for full explanations.</p>
+
+<h2>5. Important Controllers & Flows</h2>
+<p>Profile flow: edit profile and upload CV. Job application flow: Apply now button, CSRF checked, CV attached. Admin flow: edit/delete users, manage jobs/applications. See the markdown for details.</p>
+
+<h2>6. Routes and Why Some Were Moved to YAML</h2>
+<p>Some controllers had attribute registration issues (especially when class-level <code>IsGranted</code> attributes were present); explicit YAML route files were added to make sure routes are always present.</p>
+
+<h2>7. Templates and Twig Notes</h2>
+<p>Use <code>route_exists()</code> to prevent RouteNotFoundException; replace unsupported filters like <code>truncate</code> with safe code.</p>
+
+<h2>8. Security and Roles</h2>
+<p>Roles: <code>ROLE_USER</code> and <code>ROLE_ADMIN</code>. Be careful with class-level grants.</p>
+
+<h2>9. Common Errors & Fixes</h2>
+<p>See the markdown for a list of common errors and how they were solved (route guards, roles form, delete user token clearing, missing symfony/mime).</p>
+
+<h2>10. How to Run the Project Locally</h2>
+<pre><code>cd "c:\Users\yassi\Desktop\New folder\job-portal-symfony"
+composer install
+php bin/console doctrine:database:create
+php bin/console doctrine:schema:update --force
+php bin/console assets:install public
+php bin/console cache:clear
+symfony server:start -d
+</code></pre>
+
+<h2>11. Converting to PDF</h2>
+<p>Use <code>pandoc</code> or <code>wkhtmltopdf</code>. Example:</p>
+<pre><code>pandoc docs\project-explanation.md -o docs\project-explanation.pdf --pdf-engine=xelatex
+wkhtmltopdf docs\project-explanation.html docs\project-explanation.pdf
+</code></pre>
+
+<h2>12. How to Modify Common Parts</h2>
+<p>Short guidance: add routes, templates, entities, and migrations using Symfony best-practices. Use <code>php bin/console make:migration</code> then migrate.</p>
+
+<h2>13. Debugging Tips</h2>
+<pre><code>php bin/console debug:router
+php bin/console cache:clear
+php bin/console doctrine:schema:validate
+</code></pre>
+
+<h2>14. Next Steps / Learning Path</h2>
+<p>Read Symfony docs on Controllers, Routing, Forms, Security, Doctrine. Practice small changes.</p>
+
+<h2>15. Contact / Convert to PDF</h2>
+<p>If you want, I can try converting to PDF here if you install a converter or allow me to attempt in your environment.</p>
+
+</article>
+</body>
+</html>
