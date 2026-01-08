@@ -229,6 +229,39 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Dark Mode Inline Script -->
+    <script>
+        (function() {
+            // Ensure dark mode is applied if saved
+            const savedMode = localStorage.getItem('darkMode');
+            if (savedMode === 'enabled') {
+                document.documentElement.classList.add('dark-mode');
+            }
+
+            // Wait for jQuery and setup click handler
+            function setupDarkModeToggle() {
+                if (typeof jQuery !== 'undefined') {
+                    jQuery(document).ready(function($) {
+                        $('#darkModeToggle').on('click', function(e) {
+                            e.preventDefault();
+                            document.documentElement.classList.toggle('dark-mode');
+                            
+                            if (document.documentElement.classList.contains('dark-mode')) {
+                                localStorage.setItem('darkMode', 'enabled');
+                            } else {
+                                localStorage.setItem('darkMode', 'disabled');
+                            }
+                        });
+                    });
+                } else {
+                    setTimeout(setupDarkModeToggle, 100);
+                }
+            }
+
+            setupDarkModeToggle();
+        })();
+    </script>
 </body>
 
 </html>

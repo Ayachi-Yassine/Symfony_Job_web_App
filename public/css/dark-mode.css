@@ -24,21 +24,21 @@ html.dark-mode {
     --footer-bg: #0f1720;
 }
 
-/* General Dark Mode Colors */
+/* General Dark Mode Colors - IMMEDIATE VISUAL CHANGE */
 html.dark-mode {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
 }
 
 html.dark-mode body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
 }
 
 /* Container & Layout */
 html.dark-mode .container-fliud,
 html.dark-mode .container {
-    background-color: var(--bg-primary);
+    background-color: #1a1a1a !important;
 }
 
 /* Navbar */

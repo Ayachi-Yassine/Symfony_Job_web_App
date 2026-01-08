@@ -1,7 +1,7 @@
 (function ($) {
     "use strict";
 
-    // Dark Mode Toggle - Initialize immediately
+    // Dark Mode Toggle
     function initDarkMode() {
         const html = document.documentElement;
 
@@ -16,38 +16,26 @@
                 localStorage.setItem('darkMode', 'enabled');
             }
         }
-
-        // Setup toggle button click handler
-        function setupToggleListener() {
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            if (darkModeToggle) {
-                darkModeToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    html.classList.toggle('dark-mode');
-
-                    // Save preference
-                    if (html.classList.contains('dark-mode')) {
-                        localStorage.setItem('darkMode', 'enabled');
-                    } else {
-                        localStorage.setItem('darkMode', 'disabled');
-                    }
-                });
-            }
-        }
-
-        // Try to setup immediately
-        setupToggleListener();
-        
-        // Also setup on DOMContentLoaded if not already found
-        if (document.readyState !== 'loading') {
-            setupToggleListener();
-        } else {
-            document.addEventListener('DOMContentLoaded', setupToggleListener);
-        }
     }
 
-    // Initialize immediately
+    // Initialize dark mode immediately
     initDarkMode();
+
+    // Setup toggle button with jQuery (more reliable)
+    $(document).ready(function() {
+        $('#darkModeToggle').on('click', function(e) {
+            e.preventDefault();
+            const html = document.documentElement;
+            html.classList.toggle('dark-mode');
+
+            // Save preference
+            if (html.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+    });
 
     // Spinner
     var spinner = function () {
