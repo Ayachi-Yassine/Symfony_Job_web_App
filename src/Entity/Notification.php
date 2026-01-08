@@ -14,7 +14,7 @@ class Notification
     const TYPE_JOB_POST = 'job_post';
     const TYPE_MESSAGE = 'message';
     const TYPE_GENERAL = 'general';
-
+//***** */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

@@ -49,7 +49,7 @@ class CreateAdminCommand extends Command
         $this->entityManager->flush();
 
         $io->success(sprintf('Admin user "%s" created successfully!', $email));
-
+//--- IGNORE ---
         return Command::SUCCESS;
     }
 }
