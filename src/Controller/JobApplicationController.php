@@ -68,7 +68,7 @@ class JobApplicationController extends AbstractController
             if (!is_dir($uploadsDir)) {
                 mkdir($uploadsDir, 0755, true);
             }
-
+// ........
             $cvFile->move($uploadsDir, $safeFilename);
             $application->setCvFileName($safeFilename);
         } else {
