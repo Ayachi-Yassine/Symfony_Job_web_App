@@ -1,6 +1,54 @@
 (function ($) {
     "use strict";
 
+    // Dark Mode Toggle - Initialize immediately
+    function initDarkMode() {
+        const html = document.documentElement;
+
+        // Load saved preference from localStorage
+        const savedMode = localStorage.getItem('darkMode');
+        if (savedMode === 'enabled') {
+            html.classList.add('dark-mode');
+        } else if (savedMode === null) {
+            // Check system preference if no saved preference
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                html.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'enabled');
+            }
+        }
+
+        // Setup toggle button click handler
+        function setupToggleListener() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    html.classList.toggle('dark-mode');
+
+                    // Save preference
+                    if (html.classList.contains('dark-mode')) {
+                        localStorage.setItem('darkMode', 'enabled');
+                    } else {
+                        localStorage.setItem('darkMode', 'disabled');
+                    }
+                });
+            }
+        }
+
+        // Try to setup immediately
+        setupToggleListener();
+        
+        // Also setup on DOMContentLoaded if not already found
+        if (document.readyState !== 'loading') {
+            setupToggleListener();
+        } else {
+            document.addEventListener('DOMContentLoaded', setupToggleListener);
+        }
+    }
+
+    // Initialize immediately
+    initDarkMode();
+
     // Spinner
     var spinner = function () {
         setTimeout(function () {
@@ -17,7 +65,7 @@
 
 
     // Sticky Navbar
-    
+
     $(window).scroll(function () {
         if ($(this).scrollTop() > 300) {
             $('.sticky-top').css('top', '0px');

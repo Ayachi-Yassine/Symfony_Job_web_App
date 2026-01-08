@@ -29,6 +29,9 @@
 
     <!-- Template Stylesheet -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+    <!-- Dark Mode Stylesheet -->
+    <link href="{{ asset('css/dark-mode.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -64,6 +67,12 @@
                     <a href="{{ path('app_contact') }}" class="nav-item nav-link {% if app.request.attributes.get('_route') == 'app_contact' %}active{% endif %}">Contact</a>
 
                     {% if app.user %}
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link" id="darkModeToggle" title="Toggle Dark Mode">
+                                <i class="fas fa-moon moon-icon"></i>
+                                <i class="fas fa-sun sun-icon"></i>
+                            </a>
+                        </div>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                                 <i class="fas fa-bell"></i>
@@ -130,6 +139,12 @@
                             </div>
                         </div>
                     {% else %}
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link" id="darkModeToggle" title="Toggle Dark Mode">
+                                <i class="fas fa-moon moon-icon"></i>
+                                <i class="fas fa-sun sun-icon"></i>
+                            </a>
+                        </div>
                         <a href="{{ path('app_login') }}" class="nav-item nav-link">Login</a>
                         <a href="{{ path('app_register') }}" class="nav-item nav-link">Register</a>
                     {% endif %}
